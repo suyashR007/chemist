@@ -1,8 +1,11 @@
-import 'package:chemist/models/chemist_model.dart';
+import 'package:chemist/providers/homepage_provider/homepage_provider.dart';
 import 'package:chemist/screens/home_page.dart';
 import 'package:chemist/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
+
+import 'models/chemist_model/chemist_model.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,9 +21,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: themeData,
-      home: const HomePage(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => HomePageProvider()),
+      ],
+      child: MaterialApp(
+        theme: themeData,
+        home: const HomePage(),
+      ),
     );
   }
 }
