@@ -5,5 +5,5 @@ import 'package:hive/hive.dart';
 class ProductModel extends HiveObject {
   String? brandCode;
   String? brandName;
-  ItemsModel? itemsModel;
+  List<ItemsModel?>? itemsModel;
 }

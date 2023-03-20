@@ -6,5 +6,5 @@ class ItemsModel extends HiveObject {
   String? productName;
   String? productCode;
   String? mktRate;
-  CompetatiorModel? competatiorModel;
+  List<CompetatiorModel?>? competatiorModel;
 }
