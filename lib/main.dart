@@ -1,4 +1,5 @@
 import 'package:chemist/providers/homepage_provider/homepage_provider.dart';
+import 'package:chemist/providers/productpage_provider/productpage_provider.dart';
 import 'package:chemist/screens/home_page.dart';
 import 'package:chemist/utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,11 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => HomePageProvider()),
+        ChangeNotifierProxyProvider<HomePageProvider, ProductPageProvider>(
+          create: (context) => ProductPageProvider(),
+          update: (context, value, previous) =>
+              ProductPageProvider(productList: value.productList),
+        ),
       ],
       child: MaterialApp(
         theme: themeData,

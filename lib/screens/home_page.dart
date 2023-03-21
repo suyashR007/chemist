@@ -17,8 +17,15 @@ class _HomePageState extends State<HomePage> {
   late final TextEditingController searchChemistController;
   @override
   void initState() {
-    super.initState();
     searchChemistController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    final prod = Provider.of<HomePageProvider>(context);
+    prod.foundChemist = prod.chemistList;
+    super.didChangeDependencies();
   }
 
   @override
@@ -45,6 +52,10 @@ class _HomePageState extends State<HomePage> {
                 builder: (BuildContext context) {
                   return SimpleDialog(
                     title: TextFormField(
+                      onChanged: (element) =>
+                          value.runFilter(element).then((value) {
+                        setState(() {});
+                      }),
                       decoration: InputDecoration(
                         label: const Text('Search Chemist'),
                         border: OutlineInputBorder(
@@ -59,17 +70,21 @@ class _HomePageState extends State<HomePage> {
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(24, 4, 24, 4),
                           child: ListView.builder(
-                            itemCount: value.chemistList.length,
+                            itemCount: value.foundChemist.length,
                             itemBuilder: (context, index) {
                               return ListTile(
+                                key: ValueKey(value.foundChemist[index].name!),
                                 title: Text(
-                                  value.chemistList[index].name!,
+                                  value.foundChemist[index].name!,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
                                 onTap: () {
-                                  goToPage(context, const AddProductPage());
+                                  goToPage(
+                                      context,
+                                      AddProductPage(
+                                          model: value.foundChemist[index]));
                                 },
                               );
                             },
