@@ -1,5 +1,4 @@
 import 'package:chemist/providers/homepage_provider/homepage_provider.dart';
-import 'package:chemist/screens/add_product.dart';
 import 'package:chemist/utils/helpers.dart';
 import 'package:chemist/utils/text_style.dart';
 import 'package:chemist/widgets/global_widgets/my_progress_indicator.dart';
@@ -15,17 +14,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final TextEditingController searchChemistController;
+  bool runOne = true;
   @override
   void initState() {
     searchChemistController = TextEditingController();
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    final prod = Provider.of<HomePageProvider>(context);
-    prod.foundChemist = prod.chemistList;
-    super.didChangeDependencies();
   }
 
   @override
@@ -44,54 +37,51 @@ class _HomePageState extends State<HomePage> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            if (value.chemistList.isEmpty) {
+            if (value.chemistListLenght == 0) {
               showMySnackBar(context, 'No Chemist is Added');
             } else {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return SimpleDialog(
-                    title: TextFormField(
-                      onChanged: (element) =>
-                          value.runFilter(element).then((value) {
-                        setState(() {});
-                      }),
-                      decoration: InputDecoration(
-                        label: const Text('Search Chemist'),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    children: [
-                      SizedBox(
-                        height: screenSize.height * 0.3,
-                        width: screenSize.width * 0.8,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(24, 4, 24, 4),
-                          child: ListView.builder(
-                            itemCount: value.foundChemist.length,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                key: ValueKey(value.foundChemist[index].name!),
-                                title: Text(
-                                  value.foundChemist[index].name!,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                onTap: () {
-                                  goToPage(
-                                      context,
-                                      AddProductPage(
-                                          model: value.foundChemist[index]));
-                                },
-                              );
-                            },
+                  return StatefulBuilder(
+                    builder: (context, setState) => SimpleDialog(
+                      title: TextFormField(
+                        onChanged: (element) =>
+                            value.runFilter(element, setState),
+                        decoration: InputDecoration(
+                          label: const Text('Search Chemist'),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
                           ),
                         ),
                       ),
-                    ],
+                      children: [
+                        SizedBox(
+                          height: screenSize.height * 0.3,
+                          width: screenSize.width * 0.8,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(24, 4, 24, 4),
+                            child: ListView.builder(
+                              itemCount: value.foundChemist.length,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  key:
+                                      ValueKey(value.foundChemist[index].name!),
+                                  title: Text(
+                                    '${value.foundChemist[index].name!} (${value.foundChemist[index].chemistCode})',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  onTap: () =>
+                                      value.listTileTapFn(index, context),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   );
                 },
               );
@@ -103,9 +93,9 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Center(
-              child: (value.chemistList.isNotEmpty)
+              child: (value.chemistListLenght != 0)
                   ? Text(
-                      '${value.chemistList.length} Chemist Added',
+                      '${value.chemistListLenght} Chemist Added',
                       style: mainStyle,
                     )
                   : const Text(

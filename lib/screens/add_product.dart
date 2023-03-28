@@ -2,6 +2,7 @@ import 'package:chemist/models/chemist_model/chemist_model.dart';
 import 'package:chemist/models/product_model/product_model.dart';
 import 'package:chemist/providers/homepage_provider/homepage_provider.dart';
 import 'package:chemist/providers/productpage_provider/productpage_provider.dart';
+import 'package:chemist/screens/chemist_details.dart';
 import 'package:chemist/utils/colors.dart';
 import 'package:chemist/utils/text_style.dart';
 import 'package:chemist/widgets/global_widgets/my_progress_indicator.dart';
@@ -55,7 +56,7 @@ class _AddProductPageState extends State<AddProductPage> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    widget.model.name!,
+                    '${widget.model.name!} (${widget.model.chemistCode})',
                     style: mainTextStyleB500,
                   ),
                 ),
@@ -77,6 +78,14 @@ class _AddProductPageState extends State<AddProductPage> {
                       menuMaxHeight: screenSize.height * 0.5,
                       items: value.productList
                           .map<DropdownMenuItem<ProductModel>>((e) {
+                        // if (e.itemsModel != null || e.itemsModel!.isNotEmpty) {
+                        //   return e.itemsModel!.map((item) {
+                        //     return DropdownMenuItem(
+                        //       value: item!.productName,
+                        //       child: Text(item.productName!),
+                        //     );
+                        //   }).toList();
+                        // }
                         return DropdownMenuItem(
                           value: e,
                           child: Text(e.brandName!),
@@ -177,7 +186,9 @@ class _AddProductPageState extends State<AddProductPage> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 28)),
-                    onPressed: () {},
+                    onPressed: () {
+                      goToPage(context, const ChemistDetailsPage());
+                    },
                     child: const Text(
                       'Save Details',
                       style: mainTextStyleB500,
