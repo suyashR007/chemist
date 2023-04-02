@@ -11,9 +11,7 @@ class MyProgressIndicator extends StatelessWidget {
     return SizedBox(
       height: size,
       width: size,
-      child: CircularProgressIndicator(
-        color: color,
-      ),
+      child: CircularProgressIndicator.adaptive(backgroundColor: color),
     );
   }
 }

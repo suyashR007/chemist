@@ -5,7 +5,6 @@ import 'package:chemist/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-
 import 'models/chemist_model/chemist_model.dart';
 
 Future<void> main() async {

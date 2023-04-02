@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:chemist/models/chemist_model/chemist_model.dart';
 import 'package:chemist/models/product_model/product_model.dart';
+import 'package:chemist/models/table_model/table_model.dart';
 import 'package:chemist/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,10 +15,16 @@ class ProductPageProvider with ChangeNotifier {
   int counter = 0;
   late ProductModel selectedModel = productList![0];
   File? imageFile;
+  TableModel? tableModel;
+  ChemistModel? chemistModel;
 
   isLoadingFn() {
     isLoading = !isLoading;
     notifyListeners();
+  }
+
+  getChemistModel(ChemistModel mod) {
+    chemistModel = mod;
   }
 
   counterAdd() {
@@ -49,5 +57,10 @@ class ProductPageProvider with ChangeNotifier {
       isLoadingFn();
       showMySnackBar(context, 'Failed to Pick Image:$e');
     }
+  }
+
+  saveDetailButton() async {
+    tableModel!.chemistName = chemistModel!.name;
+    tableModel!.productDetails = selectedModel.brandName;
   }
 }

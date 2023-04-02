@@ -1,6 +1,7 @@
 import 'package:chemist/models/product_model/product_model.dart';
 import 'package:chemist/providers/homepage_provider/repository/home_repository_impl.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../../models/chemist_model/chemist_model.dart';
 import '../../screens/add_product.dart';
 import '../../utils/helpers.dart';
@@ -18,6 +19,11 @@ class HomePageProvider with ChangeNotifier {
   void isLoadingFn() {
     isLoading = !isLoading;
     notifyListeners();
+  }
+
+  Future<int> getTotalChemist() async {
+    var box = await Hive.openBox<ChemistModel>('chemistList');
+    return box.length;
   }
 
   Future<void> runFilter(
@@ -47,7 +53,14 @@ class HomePageProvider with ChangeNotifier {
 
   Future<void> fetchChemistDetail() async {
     isLoadingFn();
-    _chemistList = await _repositoryImpl.getChemistList();
+    var box = await Hive.openBox<ChemistModel>('chemistList');
+
+    if (_chemistList.isEmpty) {
+      _chemistList = await _repositoryImpl.getChemistList();
+      for (ChemistModel element in _chemistList) {
+        box.put(element.chemistCode, element);
+      }
+    }
     productList = await _repositoryImpl.getProductList();
     foundChemist = _chemistList;
     isLoadingFn();

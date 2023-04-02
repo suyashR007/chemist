@@ -13,7 +13,6 @@ class HomePageRepositoryImpl {
         return ChemistModel.fromJson(e);
       }).toList();
     } catch (e) {
-      print(e);
       return [];
     }
   }
