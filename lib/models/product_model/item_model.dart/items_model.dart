@@ -2,13 +2,19 @@
 import 'dart:convert';
 import 'package:hive/hive.dart';
 import 'package:chemist/models/product_model/item_model.dart/competitor_model/competitor_model.dart';
+part 'items_model.g.dart';
 
 @HiveType(typeId: 2)
 class ItemsModel extends HiveObject {
+  @HiveField(0)
   String? productName;
+  @HiveField(1)
   String? productCode;
+  @HiveField(2)
   String? mktRate;
+  @HiveField(3)
   List<CompetatiorModel?>? competatiorModel;
+
   ItemsModel({
     this.productName,
     this.productCode,

@@ -1,11 +1,19 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
+import 'package:hive_flutter/hive_flutter.dart';
+part 'table_model.g.dart';
 
-class TableModel {
+@HiveType(typeId: 5)
+class TableModel extends HiveObject {
+  @HiveField(0)
   String? dateTime;
+  @HiveField(1)
   String? orderNo;
+  @HiveField(2)
   String? chemistName;
+  @HiveField(3)
   String? productDetails;
+  @HiveField(4)
   String? status;
 
   TableModel({

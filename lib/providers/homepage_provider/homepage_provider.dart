@@ -54,14 +54,19 @@ class HomePageProvider with ChangeNotifier {
   Future<void> fetchChemistDetail() async {
     isLoadingFn();
     var box = await Hive.openBox<ChemistModel>('chemistList');
-
+    var box2 = await Hive.openBox<ProductModel>('productlist');
     if (_chemistList.isEmpty) {
       _chemistList = await _repositoryImpl.getChemistList();
       for (ChemistModel element in _chemistList) {
         box.put(element.chemistCode, element);
       }
     }
-    productList = await _repositoryImpl.getProductList();
+    if (productList.isEmpty) {
+      productList = await _repositoryImpl.getProductList();
+      for (ProductModel element in productList) {
+        box2.put(element.brandCode, element);
+      }
+    }
     foundChemist = _chemistList;
     isLoadingFn();
     notifyListeners();

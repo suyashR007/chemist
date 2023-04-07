@@ -1,10 +1,8 @@
-import 'package:chemist/models/chemist_model/chemist_model.dart';
 import 'package:chemist/providers/homepage_provider/homepage_provider.dart';
 import 'package:chemist/utils/helpers.dart';
 import 'package:chemist/utils/text_style.dart';
 import 'package:chemist/widgets/global_widgets/my_progress_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -94,16 +92,23 @@ class _HomePageState extends State<HomePage> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Center(
-              child: (value.chemistListLenght != 0)
-                  ? Text(
-                      '${value.chemistListLenght} Chemist Added',
-                      style: mainStyle,
-                    )
-                  : const Text(
-                      'No Chemist Added',
-                      style: mainStyle,
-                    ),
+            FutureBuilder<int>(
+              future: value.getTotalChemist(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Center(
+                      child: Text(
+                    '${snapshot.data} Chemist Added',
+                    style: mainStyle,
+                  ));
+                }
+                return const Center(
+                  child: Text(
+                    'No Chemist Added',
+                    style: mainStyle,
+                  ),
+                );
+              },
             ),
             ElevatedButton(
               child: (value.isLoading)

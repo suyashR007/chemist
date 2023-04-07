@@ -5,10 +5,15 @@ import 'package:hive/hive.dart';
 
 import 'package:chemist/models/product_model/item_model.dart/items_model.dart';
 
+part 'product_model.g.dart';
+
 @HiveType(typeId: 1)
 class ProductModel extends HiveObject {
+  @HiveField(0)
   String? brandCode;
+  @HiveField(1)
   String? brandName;
+  @HiveField(2)
   List<ItemsModel?>? itemsModel;
   ProductModel({
     this.brandCode,

@@ -2,6 +2,7 @@ import 'package:chemist/models/chemist_model/chemist_model.dart';
 import 'package:chemist/models/product_model/product_model.dart';
 import 'package:chemist/providers/homepage_provider/homepage_provider.dart';
 import 'package:chemist/providers/productpage_provider/productpage_provider.dart';
+import 'package:chemist/providers/tablepage_provider/tablepage_provider.dart';
 import 'package:chemist/screens/chemist_details.dart';
 import 'package:chemist/utils/colors.dart';
 import 'package:chemist/utils/text_style.dart';
@@ -183,15 +184,17 @@ class _AddProductPageState extends State<AddProductPage> {
                 ),
                 SizedBox(height: screenSize.height * 0.08),
                 Center(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 28)),
-                    onPressed: () {
-                      goToPage(context, const ChemistDetailsPage());
-                    },
-                    child: const Text(
-                      'Save Details',
-                      style: mainTextStyleB500,
+                  child: Consumer<TablePageProvider>(
+                    builder: (context, value, child) => ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 28)),
+                      onPressed: () {
+                        goToPage(context, const ChemistDetailsPage());
+                      },
+                      child: const Text(
+                        'Save Details',
+                        style: mainTextStyleB500,
+                      ),
                     ),
                   ),
                 )

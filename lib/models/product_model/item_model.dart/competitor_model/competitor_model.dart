@@ -1,12 +1,23 @@
 import 'dart:convert';
 
+import 'package:hive_flutter/hive_flutter.dart';
+
+part 'competitor_model.g.dart';
+
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-class CompetatiorModel {
+@HiveType(typeId: 4)
+class CompetatiorModel extends HiveObject {
+  @HiveField(0)
   String? productName;
+  @HiveField(1)
   String? productCode;
+  @HiveField(2)
   String? compProductCode;
+  @HiveField(3)
   String? compProductName;
+  @HiveField(4)
   String? comapnyName;
+  @HiveField(5)
   String? companyCode;
   CompetatiorModel({
     this.productName,
