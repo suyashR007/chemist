@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:chemist/providers/homepage_provider/homepage_provider.dart';
 import 'package:chemist/utils/helpers.dart';
 import 'package:chemist/utils/text_style.dart';
@@ -36,8 +38,10 @@ class _HomePageState extends State<HomePage> {
           title: const Text('Chemist Track'),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            if (value.chemistListLenght == 0) {
+          onPressed: () async {
+            int countChem = await value.getTotalChemist();
+            await value.makeList();
+            if (countChem <= 0) {
               showMySnackBar(context, 'No Chemist is Added');
             } else {
               showDialog(

@@ -15,6 +15,7 @@ Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(ChemistModelAdapter());
   Hive.registerAdapter(ProductModelAdapter());
+  Hive.registerAdapter(TableModelAdapter());
   await Hive.openBox<ChemistModel>('chemistList');
   await Hive.openBox<ProductModel>('productList');
   await Hive.openBox<TableModel>('tablelist');

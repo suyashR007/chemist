@@ -71,4 +71,13 @@ class HomePageProvider with ChangeNotifier {
     isLoadingFn();
     notifyListeners();
   }
+
+  makeList() async {
+    var box = await Hive.openBox<ChemistModel>('chemistList');
+    int length = await getTotalChemist();
+    for (int i = 0; i < length; i++) {
+      print(box.get(i));
+      //_chemistList.add(box.getAt(i) );
+    }
+  }
 }

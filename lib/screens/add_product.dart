@@ -1,5 +1,6 @@
 import 'package:chemist/models/chemist_model/chemist_model.dart';
 import 'package:chemist/models/product_model/product_model.dart';
+import 'package:chemist/models/table_models/table_model.dart';
 import 'package:chemist/providers/homepage_provider/homepage_provider.dart';
 import 'package:chemist/providers/productpage_provider/productpage_provider.dart';
 import 'package:chemist/providers/tablepage_provider/tablepage_provider.dart';
@@ -29,6 +30,7 @@ class _AddProductPageState extends State<AddProductPage> {
     super.initState();
   }
 
+  TableModel model = TableModel();
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -94,6 +96,7 @@ class _AddProductPageState extends State<AddProductPage> {
                       }).toList(),
                       onChanged: (value) {
                         productPageProvider.changeSelectedModel(value!);
+                        model.productDetails = value.brandName;
                       },
                     ),
                   ),
@@ -185,11 +188,15 @@ class _AddProductPageState extends State<AddProductPage> {
                 SizedBox(height: screenSize.height * 0.08),
                 Center(
                   child: Consumer<TablePageProvider>(
-                    builder: (context, value, child) => ElevatedButton(
+                    builder: (context, tableProvider, child) => ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(horizontal: 28)),
                       onPressed: () {
                         goToPage(context, const ChemistDetailsPage());
+                        model.dateTime = DateTime.now().toIso8601String();
+                        model.orderNo = '1';
+
+                        tableProvider.saveDetails(model);
                       },
                       child: const Text(
                         'Save Details',
