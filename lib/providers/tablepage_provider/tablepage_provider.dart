@@ -10,9 +10,8 @@ class TablePageProvider with ChangeNotifier {
   ) async {
     var box = await Hive.openBox<TableModel>('tablelist');
     int lenght = box.length;
-    model.orderNo = (lenght++).toString();
+    model.orderNo = (++lenght).toString();
     box.add(model);
-    //box.put(model.orderNo, model);
   }
 
   Future<List<TableModel>> getaTableList() async {
@@ -20,7 +19,7 @@ class TablePageProvider with ChangeNotifier {
       var box = await Hive.openBox<TableModel>('tablelist');
       int length = box.length;
       if (length > 0) {
-        for (int i = 0; i <= length; i++) {
+        for (int i = 0; i < length; i++) {
           models.add(box.getAt(i)!);
         }
       }

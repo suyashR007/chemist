@@ -41,13 +41,13 @@ class _HomePageState extends State<HomePage> {
           floatingActionButton: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: FloatingActionButton(
-                  onPressed: () => value.clearData(context),
-                  child: const Icon(Icons.delete),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: FloatingActionButton(
+              //     onPressed: () => value.clearData(context),
+              //     child: const Icon(Icons.delete),
+              //   ),
+              // ),
               FloatingActionButton(
                 onPressed: () async {
                   int countChem = await value.getTotalChemist();

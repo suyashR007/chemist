@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:chemist/models/product_model/item_model.dart/items_model.dart';
 import 'package:chemist/models/product_model/product_model.dart';
 import 'package:chemist/models/table_models/table_model.dart';
 import 'package:chemist/providers/homepage_provider/repository/home_repository_impl.dart';
@@ -114,6 +113,7 @@ class HomePageProvider with ChangeNotifier {
     for (int i = 0; i < length2; i++) {
       productList.add(box2.getAt(i)!);
     }
+    makeProductItemList();
     notifyListeners();
   }
 
@@ -121,9 +121,13 @@ class HomePageProvider with ChangeNotifier {
     List<String> productItemList = [];
     for (ProductModel item in productList) {
       for (var element in item.itemsModel!) {
-        productItemList.add(element!.productName!);
+        if (productItemList.contains(element!.productName)) {
+        } else {
+          productItemList.add(element.productName!);
+        }
       }
     }
+
     return productItemList;
   }
 }
