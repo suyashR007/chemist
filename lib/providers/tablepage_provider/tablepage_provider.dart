@@ -4,19 +4,25 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 class TablePageProvider with ChangeNotifier {
   List<TableModel> models = [];
+
   Future<void> saveDetails(
     TableModel model,
   ) async {
     var box = await Hive.openBox<TableModel>('tablelist');
-    box.put(model.orderNo, model);
+    int lenght = box.length;
+    model.orderNo = (lenght++).toString();
+    box.add(model);
+    //box.put(model.orderNo, model);
   }
 
   Future<List<TableModel>> getaTableList() async {
     try {
       var box = await Hive.openBox<TableModel>('tablelist');
       int length = box.length;
-      for (int i = 0; i <= length; i++) {
-        models.add(box.getAt(i)!);
+      if (length > 0) {
+        for (int i = 0; i <= length; i++) {
+          models.add(box.getAt(i)!);
+        }
       }
       return models;
     } catch (e) {

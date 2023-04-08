@@ -1,3 +1,5 @@
+import 'package:chemist/models/product_model/item_model.dart/competitor_model/competitor_model.dart';
+import 'package:chemist/models/product_model/item_model.dart/items_model.dart';
 import 'package:chemist/models/product_model/product_model.dart';
 import 'package:chemist/models/table_models/table_model.dart';
 import 'package:chemist/providers/homepage_provider/homepage_provider.dart';
@@ -16,6 +18,8 @@ Future<void> main() async {
   Hive.registerAdapter(ChemistModelAdapter());
   Hive.registerAdapter(ProductModelAdapter());
   Hive.registerAdapter(TableModelAdapter());
+  Hive.registerAdapter(ItemsModelAdapter());
+  Hive.registerAdapter(CompetatiorModelAdapter());
   await Hive.openBox<ChemistModel>('chemistList');
   await Hive.openBox<ProductModel>('productList');
   await Hive.openBox<TableModel>('tablelist');
@@ -33,7 +37,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<HomePageProvider, ProductPageProvider>(
           create: (context) => ProductPageProvider(),
           update: (context, value, previous) =>
-              ProductPageProvider(productList: value.productList),
+              ProductPageProvider(productItemList: value.makeProductItemList()),
         ),
         ChangeNotifierProvider(create: (context) => TablePageProvider()),
       ],

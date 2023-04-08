@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:chemist/models/chemist_model/chemist_model.dart';
-import 'package:chemist/models/product_model/product_model.dart';
 import 'package:chemist/models/table_models/table_model.dart';
 import 'package:chemist/utils/helpers.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProductPageProvider with ChangeNotifier {
+  ProductPageProvider({this.productItemList});
   bool isLoading = false;
-
-  List<ProductModel>? productList;
-  ProductPageProvider({this.productList});
+  List<String>? productItemList;
   int counter = 0;
-  late ProductModel selectedModel = productList![0];
+  late String selectedModel = productItemList![0];
   File? imageFile;
 
   TableModel? tableModel;
@@ -40,7 +38,7 @@ class ProductPageProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  changeSelectedModel(ProductModel e) {
+  changeSelectedModel(String e) {
     selectedModel = e;
     notifyListeners();
   }
@@ -62,6 +60,6 @@ class ProductPageProvider with ChangeNotifier {
 
   saveDetailButton() async {
     tableModel!.chemistName = chemistModel!.name;
-    tableModel!.productDetails = selectedModel.brandName;
+    tableModel!.productDetails = selectedModel;
   }
 }

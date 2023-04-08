@@ -1,4 +1,5 @@
 import 'package:chemist/models/chemist_model/chemist_model.dart';
+import 'package:chemist/models/product_model/item_model.dart/items_model.dart';
 import 'package:chemist/models/product_model/product_model.dart';
 import 'package:chemist/models/table_models/table_model.dart';
 import 'package:chemist/providers/homepage_provider/homepage_provider.dart';
@@ -69,34 +70,37 @@ class _AddProductPageState extends State<AddProductPage> {
                   style: mainTextStyleB500,
                 ),
                 SizedBox(height: screenSize.height * 0.01),
-                Consumer<HomePageProvider>(
+                Consumer<ProductPageProvider>(
                   builder: (context, value, child) => Container(
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.black54),
                         borderRadius: BorderRadius.circular(12)),
                     child: DropdownButton(
                       value: productPageProvider.selectedModel,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                       isExpanded: true,
                       menuMaxHeight: screenSize.height * 0.5,
-                      items: value.productList
-                          .map<DropdownMenuItem<ProductModel>>((e) {
-                        // if (e.itemsModel != null || e.itemsModel!.isNotEmpty) {
-                        //   return e.itemsModel!.map((item) {
-                        //     return DropdownMenuItem(
-                        //       value: item!.productName,
-                        //       child: Text(item.productName!),
-                        //     );
-                        //   }).toList();
-                        // }
+                      items: value.productItemList!
+                          .map<DropdownMenuItem<String>>((e) {
                         return DropdownMenuItem(
                           value: e,
-                          child: Text(e.brandName!),
+                          child: Text(e),
                         );
+                        // e.itemsModel!.map((item) {
+                        //   return DropdownMenuItem(
+                        //     value: item!.productName,
+                        //     child: Text(item.productName!),
+                        //   );
+                        // });
+
+                        // return DropdownMenuItem(
+                        //   value: e,
+                        //   child: Text(e.itemsModel!.productName!),
+                        // );
                       }).toList(),
                       onChanged: (value) {
                         productPageProvider.changeSelectedModel(value!);
-                        model.productDetails = value.brandName;
+                        model.productDetails = value.toString();
                       },
                     ),
                   ),
@@ -194,8 +198,8 @@ class _AddProductPageState extends State<AddProductPage> {
                       onPressed: () {
                         goToPage(context, const ChemistDetailsPage());
                         model.dateTime = DateTime.now().toIso8601String();
-                        model.orderNo = '1';
-
+                        model.chemistName = widget.model.name;
+                        model.status = productPageProvider.counter.toString();
                         tableProvider.saveDetails(model);
                       },
                       child: const Text(

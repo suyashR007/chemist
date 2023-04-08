@@ -1,4 +1,8 @@
+import 'dart:async';
+
+import 'package:chemist/models/product_model/item_model.dart/items_model.dart';
 import 'package:chemist/models/product_model/product_model.dart';
+import 'package:chemist/models/table_models/table_model.dart';
 import 'package:chemist/providers/homepage_provider/repository/home_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -8,6 +12,7 @@ import '../../utils/helpers.dart';
 
 class HomePageProvider with ChangeNotifier {
   bool isLoading = false;
+  bool floatingActionLoading = false;
   final HomePageRepositoryImpl _repositoryImpl = HomePageRepositoryImpl();
   List<ChemistModel> _chemistList = [];
   List<ProductModel> productList = [];
@@ -18,6 +23,23 @@ class HomePageProvider with ChangeNotifier {
 
   void isLoadingFn() {
     isLoading = !isLoading;
+    notifyListeners();
+  }
+
+  void floatingActionLoadingFn() {
+    floatingActionLoading = !floatingActionLoading;
+    notifyListeners();
+  }
+
+  void clearData(BuildContext context) async {
+    var box = await Hive.openBox<ChemistModel>('chemistList');
+    var box2 = await Hive.openBox<ProductModel>('productlist');
+    var box3 = await Hive.openBox<TableModel>('tablelist');
+    await box.clear();
+    await box2.clear();
+    await box3.clear();
+    // ignore: use_build_context_synchronously
+    showMySnackBar(context, 'Data has been Cleared');
     notifyListeners();
   }
 
@@ -60,24 +82,48 @@ class HomePageProvider with ChangeNotifier {
       for (ChemistModel element in _chemistList) {
         box.put(element.chemistCode, element);
       }
+    } else {
+      await makeChemistList();
     }
     if (productList.isEmpty) {
       productList = await _repositoryImpl.getProductList();
       for (ProductModel element in productList) {
         box2.put(element.brandCode, element);
       }
+    } else {
+      await makeProductList();
     }
     foundChemist = _chemistList;
     isLoadingFn();
     notifyListeners();
   }
 
-  makeList() async {
+  makeChemistList() async {
     var box = await Hive.openBox<ChemistModel>('chemistList');
     int length = await getTotalChemist();
     for (int i = 0; i < length; i++) {
-      print(box.get(i));
-      //_chemistList.add(box.getAt(i) );
+      _chemistList.add(box.getAt(i)!);
     }
+    foundChemist = _chemistList;
+    notifyListeners();
+  }
+
+  makeProductList() async {
+    var box2 = await Hive.openBox<ProductModel>('productlist');
+    int length2 = box2.length;
+    for (int i = 0; i < length2; i++) {
+      productList.add(box2.getAt(i)!);
+    }
+    notifyListeners();
+  }
+
+  List<String> makeProductItemList() {
+    List<String> productItemList = [];
+    for (ProductModel item in productList) {
+      for (var element in item.itemsModel!) {
+        productItemList.add(element!.productName!);
+      }
+    }
+    return productItemList;
   }
 }
